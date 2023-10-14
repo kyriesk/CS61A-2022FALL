@@ -125,29 +125,18 @@ def count_coins(change):
     True
     """
     "*** YOUR CODE HERE ***"
-    if change >= 25:
-        k = 25
-    elif change >= 10:
-        k = 10
-    elif change >= 5:
-        k = 5
-    else:
-        k = 1
-
-    def count(change, k):
-        if change < 0:
+    def constrained_count(total, smallest_coin):
+        if total == 0:
+            return 1
+        if total < 0:
             return 0
-        elif 0 <= change <= 4:
-            return 1
-        elif k == 1:
-            return 1
-        elif k == 25:
-            return count(change-25, 25) + count(change-10, 10) + count(change-5, 5) + count(change-1, 1)
-        elif k == 10:
-            return count(change-10, 10) + count(change-5, 5) + count(change-1, 1)
-        else:
-            return count(change-5, 5) + count(change-1, 1)
-    return count(change, k)
+        if smallest_coin == None:
+            return 0
+        without_coin = constrained_count(
+            total, next_larger_coin(smallest_coin))
+        with_coin = constrained_count(total - smallest_coin, smallest_coin)
+        return without_coin + with_coin
+    return constrained_count(total, 1)
 
 
 # Change to True if you would like to remain anonymous on the final leaderboard.
